@@ -34,4 +34,5 @@ const getAllResults = (url, callback) => {
 export default {
   getPeople,
   getStarships
+
 }

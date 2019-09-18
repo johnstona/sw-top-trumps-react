@@ -10,29 +10,21 @@ function App () {
   const [player1Score, updatePlayer1Score] = useState(0)
   const [player2Score, updatePlayer2Score] = useState(0)
 
-  useEffect(() => {
-    if (allPeople < 150) {
-      API.getPeople(updatePeople)
-    }
-  }, [allPeople])
-
-  useEffect(() => {
-    if (allStarships < 150) {
-      API.getStarships(updateStarships)
-    }
-  }, [allStarships])
+  const newGame = (option) => {
+    option === 'people' ? API.getPeople(updatePeople) : API.getStarships(updateStarships)
+  }
 
   const updateScore = (p1, p2) => {
     updatePlayer1Score((player1Score + p1))
     updatePlayer2Score((player2Score + p2))
   }
 
-  const people = allPeople.filter(person => person.name && ((person.height !== 'unknown') && (person.mass !== 'unknown')))
-  const starships = allStarships.filter(starship => starship.name && ((starship.length !== 'unknown') && (starship.crew !== 'unknown')))
+  const people = allPeople.filter(person => (person.name && ((person.height !== 'unknown') && (person.mass !== 'unknown'))))
+  const starships = allStarships.filter(starship => (starship.name && ((starship.length !== 'unknown') && (starship.crew !== 'unknown'))))
 
-  return ( <>
+  return (<>
     {/* <Header /> */}
-    <CardContainer people={people} starships={starships} updateScore={updateScore}/>
+    <CardContainer people={people} starships={starships} updateScore={updateScore} newGame={newGame} />
     {/* <Result lastResult={lastResult} changeResult={changeResult}/>
     <Score player1Score={player1Score} player2Score={player2Score}/> */}
       </>
