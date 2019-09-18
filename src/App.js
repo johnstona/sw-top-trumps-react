@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
+import './App.css'
+import API from './adapters/API'
+import CardContainer from './components/CardContainer'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function App () {
+  const [allPeople, updatePeople] = useState([])
+  const [allStarships, updateStarships] = useState([])
+  const [lastResult, changeResult] = useState('Start a new game')
+  const [player1Score, updatePlayer1Score] = useState(0)
+  const [player2Score, updatePlayer2Score] = useState(0)
+
+  useEffect(() => {
+    if (allPeople < 150) {
+      API.getPeople(updatePeople)
+    }
+  }, [allPeople])
+
+  useEffect(() => {
+    if (allStarships < 150) {
+      API.getStarships(updateStarships)
+    }
+  }, [allStarships])
+
+  const updateScore = (p1, p2) => {
+    updatePlayer1Score((player1Score + p1))
+    updatePlayer2Score((player2Score + p2))
+  }
+
+  const people = allPeople.filter(person => person.name && ((person.height !== 'unknown') && (person.mass !== 'unknown')))
+  const starships = allStarships.filter(starship => starship.name && ((starship.length !== 'unknown') && (starship.crew !== 'unknown')))
+
+  return ( <>
+    {/* <Header /> */}
+    <CardContainer people={people} starships={starships} updateScore={updateScore}/>
+    {/* <Result lastResult={lastResult} changeResult={changeResult}/>
+    <Score player1Score={player1Score} player2Score={player2Score}/> */}
+      </>
+  )
 }
 
-export default App;
+export default App
