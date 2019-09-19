@@ -17,7 +17,7 @@ const Card = ({ card, playerCard, toggleShow, show, options, checkResult }) => {
         </p>
       </div>
       <div>
-        <p>{options[0]}: {card[options[1]]}
+        <p>{options[1]}: {card[options[1]]}
           {(playerCard && !show) && <button onClick={() => handleClick(options[1])}>choose</button>}
         </p>
       </div>

@@ -3,11 +3,13 @@ import './App.css'
 import API from './adapters/API'
 import CardContainer from './components/CardContainer'
 import Header from './components/Header'
+import Result from './components/Result'
+import Score from './components/Score'
 
 function App () {
   const [allPeople, updatePeople] = useState([])
   const [allStarships, updateStarships] = useState([])
-  const [lastResult, changeResult] = useState('Start a new game')
+  const [lastResult, changeResult] = useState()
   const [player1Score, updatePlayer1Score] = useState(0)
   const [player2Score, updatePlayer2Score] = useState(0)
 
@@ -38,8 +40,8 @@ function App () {
   return (<>
     <Header />
     <CardContainer people={people} starships={starships} updateScore={updateScore} newGame={newGame} handleResult={handleResult} />
-    {/* <Result lastResult={lastResult} />
-    <Score player1Score={player1Score} player2Score={player2Score}/> */}
+    <Result lastResult={lastResult} />
+  {lastResult && <Score player1Score={player1Score} player2Score={player2Score}/> }
       </>
   )
 }
