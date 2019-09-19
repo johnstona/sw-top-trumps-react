@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './App.css'
 import API from './adapters/API'
 import CardContainer from './components/CardContainer'
+import Header from './components/Header'
 
 function App () {
   const [allPeople, updatePeople] = useState([])
@@ -19,13 +20,25 @@ function App () {
     updatePlayer2Score((player2Score + p2))
   }
 
+  const handleResult = (p1, p2) => {
+    if (p1 > p2) {
+      updateScore(1, 0)
+      changeResult('Victory!')
+    } else if (p1 < p2) {
+      updateScore(0, 1)
+      changeResult('You Lose!')
+    } else if (p1 === p2) {
+      changeResult('Hmm a draw!')
+    }
+  }
+
   const people = allPeople.filter(person => (person.name && ((person.height !== 'unknown') && (person.mass !== 'unknown'))))
   const starships = allStarships.filter(starship => (starship.name && ((starship.length !== 'unknown') && (starship.crew !== 'unknown'))))
 
   return (<>
-    {/* <Header /> */}
-    <CardContainer people={people} starships={starships} updateScore={updateScore} newGame={newGame} />
-    {/* <Result lastResult={lastResult} changeResult={changeResult}/>
+    <Header />
+    <CardContainer people={people} starships={starships} updateScore={updateScore} newGame={newGame} handleResult={handleResult} />
+    {/* <Result lastResult={lastResult} />
     <Score player1Score={player1Score} player2Score={player2Score}/> */}
       </>
   )
