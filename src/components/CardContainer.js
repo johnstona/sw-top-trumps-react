@@ -4,12 +4,23 @@ import Loading from './Loading'
 import Dealing from './Dealing'
 import NextCard from './NextCard'
 
-const CardContainer = ({ people, starships, newGame }) => {
+const CardContainer = ({ people, starships, newGame, handleResult }) => {
   const [player1Card, setPlayer1Card] = useState({})
   const [player2Card, setPlayer2Card] = useState({})
   const [currentGame, setCurrentGame] = useState()
   const [show, toggleShow] = useState(false)
   const [game, toggleGame] = useState(false)
+
+  let option1
+  let option2
+
+  if (currentGame === 'people') {
+    option1 = 'mass'
+    option2 = 'height'
+  } else {
+    option1 = 'length'
+    option2 = 'crew'
+  }
 
   const sampleCard = (array) => {
     return array[Math.floor(Math.random() * array.length)]
@@ -18,6 +29,7 @@ const CardContainer = ({ people, starships, newGame }) => {
   const checkResult = (option) => {
     let player1Result = parseInt(player1Card[option].replace(/,/g, ''))
     let player2Result = parseInt(player2Card[option].replace(/,/g, ''))
+    handleResult(player1Result, player2Result)
   }
 
   const getCard = (choice) => {
@@ -40,6 +52,8 @@ const CardContainer = ({ people, starships, newGame }) => {
     toggleGame(false)
   }
 
+  const options = [option1, option2]
+
   // const LazyComponent = (condition, component) => condition ? component : <Loading />
 
   return <>
@@ -48,10 +62,10 @@ const CardContainer = ({ people, starships, newGame }) => {
     </div>
     <div class='row'>
       <div class='col-sm-6'>
-        {player1Card.name && <Card card={player1Card} checkResult={checkResult} playerCard toggleShow={() => toggleShow(!show)} />}
+        {player1Card.name && <Card card={player1Card} options={options} checkResult={checkResult} show={show} playerCard toggleShow={() => toggleShow(!show)} />}
       </div>
       <div class='col-sm-6'>
-        {player2Card.name && (show ? <Card card={player2Card} checkResult={checkResult}  /> : null)}
+        {player2Card.name && (show ? <Card card={player2Card} options={options} /> : null)}
       </div>
     </div>
     <div>
