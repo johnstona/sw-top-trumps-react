@@ -8,6 +8,8 @@ const CardContainer = ({ people, starships, newGame }) => {
   const [player1Card, setPlayer1Card] = useState({})
   const [player2Card, setPlayer2Card] = useState({})
   const [currentGame, setCurrentGame] = useState()
+  const [show, toggleShow] = useState(false)
+  const [game, toggleGame] = useState(false)
 
   const sampleCard = (array) => {
     return array[Math.floor(Math.random() * array.length)]
@@ -28,26 +30,40 @@ const CardContainer = ({ people, starships, newGame }) => {
   }
 
   const handleClick = (option) => {
-    newGame(option)
+    newGame(option, newCards)
     setCurrentGame(option)
+    toggleGame(true)
   }
 
-  const LazyComponent = (condition, component) => condition ? component : <Loading />
-  const DealingLoading = (condition, component) => condition ? component : <Dealing />
+  const handleStart = () => {
+    newCards()
+    toggleGame(false)
+  }
+
+  // const LazyComponent = (condition, component) => condition ? component : <Loading />
 
   return <>
+    <div>
+      {!currentGame ? <p>New Game - select type</p> : `${currentGame} game!`}
+    </div>
     <div class='row'>
       <div class='col-sm-6'>
-        {LazyComponent(player1Card, <Card card={player1Card} checkResult={checkResult} />)}
+        {player1Card.name && <Card card={player1Card} checkResult={checkResult} playerCard toggleShow={() => toggleShow(!show)} />}
       </div>
       <div class='col-sm-6'>
-        {LazyComponent(player2Card, <Card card={player2Card} checkResult={checkResult} />)}
+        {player2Card.name && (show ? <Card card={player2Card} checkResult={checkResult}  /> : null)}
       </div>
     </div>
-    {(player1Card.name && player2Card.name) && <NextCard newCards={newCards} /> }
-    <p>New Game?</p>
-    <button type='button' id='new-char-btn' class='btn btn-primary' onClick={() => handleClick('people')}>Characters</button>
-    <button type='button' id='new-star-btn' class='btn btn-success' onClick={() => handleClick('starships')}>Starships</button>
+    <div>
+      {(people.length || starships.length) ? (show && <NextCard newCards={newCards} toggleShow={() => toggleShow(!show)} />) : (currentGame ? <Dealing /> : null)}
+      {(game && (people.length || starships.length)) ? <button type='button' id='first-card-btn' class='btn btn-primary' onClick={() => handleStart()}>Deal First Card</button> : null}
+    </div>
+    {!currentGame &&
+    <>
+      <button type='button' id='new-char-btn' class='btn btn-primary' onClick={() => handleClick('people')}>Characters</button>
+      <button type='button' id='new-star-btn' class='btn btn-success' onClick={() => handleClick('starships')}>Starships</button>
+    </>
+    }
        </>
 }
 

@@ -10,7 +10,7 @@ function App () {
   const [player1Score, updatePlayer1Score] = useState(0)
   const [player2Score, updatePlayer2Score] = useState(0)
 
-  const newGame = (option) => {
+  const newGame = (option, callback) => {
     option === 'people' ? API.getPeople(updatePeople) : API.getStarships(updateStarships)
   }
 
